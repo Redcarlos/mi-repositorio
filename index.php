@@ -1,6 +1,8 @@
 <?php
     require 'conexion.php';
+
     $where = "";
+
     if(!empty($_POST))
     {
         $valor = $_POST['campo'];
@@ -9,8 +11,15 @@
             $where = " WHERE a.cliente_id = '$valor' or a.nombre LIKE '%$valor%' or a.telefono LIKE '%$valor%' or a.celular LIKE '%$valor%' or a.direccion LIKE '%$valor%' or e.nombre LIKE '%$valor%' ORDER BY a.cliente_id ASC";
         }
 		if(!empty($valorId)){
-            $where = " WHERE a.cliente_id = '$valor' ";
+            $where = " WHERE a.cliente_id = '$valorId' ";
         }
+    }
+    $sql = "select a.cliente_id, a.nombre, a.contacto1, a.contacto2, b.telefono1, b.colonia
+            from clientes a
+            left join dirs_clientes b on (a.cliente_id = b.cliente_id)$where";
+    $resultado = ibase_query($mysqli, $sql) or exit(ibase_errmsg());
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
